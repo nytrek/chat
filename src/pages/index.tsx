@@ -3,7 +3,9 @@ import {
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
+import { useSession } from "next-auth/react";
 import Image, { ImageProps } from "next/image";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { socket } from "../socket";
@@ -64,6 +66,15 @@ export default function Home() {
       socket.off("onMessage");
     };
   }, []);
+  //https://medium.com/@romeobazil/share-auth-session-between-nextjs-multi-zones-apps-using-nextauth-js-5bab51bb7e31
+  const router = useRouter();
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated: () => router.push("/"),
+  });
+  if (status === "loading") {
+    return <span>Loading...</span>;
+  }
   return (
     <div className="mx-auto flow-root max-w-lg px-4 py-4 sm:px-6 sm:py-6">
       <div className="relative h-[70vh] rounded-md bg-gray-800/40">
