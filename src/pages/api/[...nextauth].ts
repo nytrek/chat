@@ -2,6 +2,8 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { User } from "../../types";
 
+//https://medium.com/@romeobazil/share-auth-session-between-nextjs-multi-zones-apps-using-nextauth-js-5bab51bb7e31
+
 // This helper function will allows us to get the domain name regardless of its form
 // beta.example.com => example.com
 // example.com/* => example.com
