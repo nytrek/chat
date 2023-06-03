@@ -70,7 +70,7 @@ export default function Home() {
   const router = useRouter();
   const { data: session, status } = useSession({
     required: true,
-    onUnauthenticated: () => router.push("/"),
+    onUnauthenticated: () => router.push(process.env.NEXT_PUBLIC_AUTH_URL!),
   });
   if (status === "loading") {
     return <span>Loading...</span>;
