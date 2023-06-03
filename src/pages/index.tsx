@@ -42,8 +42,7 @@ export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const { register, handleSubmit } = useForm<Message>();
   const onSubmit: SubmitHandler<Message> = (data) => {
-    const { message } = data;
-    isConnected && socket.emit("newMessage", message);
+    isConnected && socket.emit("newMessage", data);
   };
   const connect = () => {
     socket.connect();
@@ -56,10 +55,7 @@ export default function Home() {
   useEffect(() => {
     connect();
     socket.on("onMessage", (data) =>
-      setMessages((messages) => [
-        ...messages,
-        { message: data, name: "Kenny Tran" },
-      ])
+      setMessages((messages) => [...messages, data])
     );
     return () => {
       socket.off("connect");
@@ -118,7 +114,7 @@ export default function Home() {
                     <BlurImage
                       src={
                         "https://api.dicebear.com/6.x/avataaars/svg?seed=" +
-                        index
+                        session.user.id
                       }
                       alt="avatar"
                     />
@@ -126,7 +122,7 @@ export default function Home() {
                   <div className="min-w-0 flex-1">
                     <div>
                       <div className="text-sm">
-                        <h4 className="font-medium text-white">{item.name}</h4>
+                        <h4 className="font-medium text-white">@{item.name}</h4>
                       </div>
                     </div>
                     <div className="mt-0.5 text-sm text-gray-400">
@@ -142,6 +138,12 @@ export default function Home() {
           onSubmit={handleSubmit(onSubmit)}
           className="absolute bottom-0 left-0 w-full"
         >
+          <input
+            type="hidden"
+            id="name"
+            {...register("name")}
+            value={session.user.username}
+          />
           <input
             type="text"
             id="message"
